@@ -7,9 +7,12 @@ from . import views
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', views.index, name='index'),
-    path('api/ThemesList', views.ThemesList.as_view(), name='ThemesList'),
-    re_path(r'^api/QuizzesList/(?P<QuizNumber>\d+)$', views.QuizzesList.as_view(), name='QuizzesList')
+    path('quizzes', views.quizzhtmllist.as_view(), name='quizzes'),
+    re_path(r'^api/getquizzes/(?P<QuizNumber>\d+)$', views.QuizzesList.as_view(), name='QuizzesList'),
 ]
 
+urlpatterns += [
+    re_path(r'^editquiz/(?P<quizid>[-\w]+)$', views.renew_quiz, name='renew-quiz'),
+]
 
 #handler404 = 'views.handler404'

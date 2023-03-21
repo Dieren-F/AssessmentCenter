@@ -15,26 +15,30 @@
   {% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-<table>
+<div class="box">
+  <div class="box-container">
+    <div class="box-title">Добро пожаловать в ассессмент центр!</div>
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
 
-<tr>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
-</tr>
+      <div class="box-form">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </div>
+      <div class="box-form">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+      </div>
 
-<tr>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
-</tr>
-</table>
+      <div class="box-form">
+        <input class="box-button" type="submit" value="Войти" />
+        <input type="hidden" name="next" value="{{ next }}" />
+      </div>
+    </form>
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    {# Assumes you setup the password_reset view in your URLconf #}
+    <div class="box-form"><p><a href="{% url 'password_reset' %}">Lost password?</a></p></div>
+  </div>
+</div>
 
 {% endblock %}

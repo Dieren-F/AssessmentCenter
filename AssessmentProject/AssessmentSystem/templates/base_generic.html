@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
-<body>
+<body class="main-page">
 
   <div class="container-fluid">
 
@@ -24,7 +24,7 @@
       <ul class="sidebar-nav">
           <li><a href="{% url 'index' %}">Home</a></li>
           {% if user.is_authenticated %}
-          <li><a href="">Themes</a></li>
+          <li><a href="{% url 'index' %}quizzes">quizzes</a></li>
           <li><a href="{% url 'index' %}accounts/logout">Logout</a></li>
           {%else%}
           <li><a href="{% url 'index' %}accounts/login">Login</a></li>

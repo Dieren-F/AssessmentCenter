@@ -21,20 +21,12 @@ class clients(models.Model):
     fromIP = models.CharField(max_length=15, help_text="Client's last login IP")
 """
 
-class themes(models.Model):
-
-    # Fields
-    themename = models.CharField(unique=True, max_length=512, help_text="Name of the theme")
-    #dateins = models.DateTimeField(auto_now = True, help_text="Date when the row was append")
-    datechange = models.DateTimeField(blank=True, help_text="Date when the row was changed")
-
 class quizzes(models.Model):
 
     # Fields
     quizname = models.CharField(unique=True, max_length=512, help_text="Name of the quiz")
     duration = models.IntegerField(default=0, help_text="Duration of tests")
     countofquestions = models.IntegerField(default=0, help_text="ammount of questions in this test")
-    themeID = models.ForeignKey(themes, on_delete=models.CASCADE)
     clientID = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class editors(models.Model):

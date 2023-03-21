@@ -1,10 +1,12 @@
-from django.shortcuts import render
-from .models import themes, quizzes, editors, questions, answers, assignment, results
+from django.shortcuts import render, get_object_or_404
+from .models import quizzes, editors, questions, answers, assignment, results
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .forms import RenewQuizForm
 
 def handler404(request, *args, **kwargs):
     return HttpResponseRedirect('/')
@@ -34,31 +36,11 @@ def login(request):
         context={},
     )
 
-class ThemesList(generic.ListView):
-    model = themes
-    
-    def get_queryset(self):
-        return themes.objects.filter()
-
-    def get_context_data(self, **kwargs):
-        # В первую очередь получаем базовую реализацию контекста
-        context = super(ThemesList, self).get_context_data(**kwargs)
-        # Добавляем новую переменную к контексту и инициализируем её некоторым значением
-        context['some_data'] = 'This is just some data'
-        return context
-    
-    def get(self, request, *args, **kwargs):
-        db = self.get_queryset()
-        data = []
-        for row in db:
-            data.append({"id":row.id, "themename":row.themename})
-        return JsonResponse({"root":data})
-
 class QuizzesList(LoginRequiredMixin, generic.ListView):
     model = quizzes
     
-    def get_queryset(self, QuizNumber):
-        return quizzes.objects.filter(themeID = QuizNumber)
+    def get_queryset(self):
+        return quizzes.objects.filter()
     
     def get(self, request, *args, **kwargs):
         db = self.get_queryset(kwargs["QuizNumber"])
@@ -66,6 +48,38 @@ class QuizzesList(LoginRequiredMixin, generic.ListView):
         for row in db:
             data.append({"id":row.id, "quizname":row.quizname,
             "duration":row.duration, "countofquestions":row.countofquestions,
-            "themeID":row.themeID.id, "clientID":row.clientID.id})
+            "clientID":row.clientID.id})
         return JsonResponse({"root":data})
-        
+    
+class quizzhtmllist(LoginRequiredMixin, generic.ListView):
+    models = quizzes
+
+    def get_queryset(self):
+        return quizzes.objects.filter()
+    
+
+def renew_quiz(request, quizid):
+    quiz_inst = get_object_or_404(quizzes, id=quizid)
+
+    # Если данный запрос типа POST, тогда
+    if request.method == 'POST':
+
+        # Создаём экземпляр формы и заполняем данными из запроса (связывание, binding):
+        form = RenewQuizForm(request.POST)
+
+        # Проверка валидности данных формы:
+        if form.is_valid():
+            # Обработка данных из form.cleaned_data
+            #(здесь мы просто присваиваем их полю due_back)
+            quiz_inst.quizname = form.cleaned_data['renewal_name']
+            quiz_inst.save()
+
+            # Переход по адресу 'all-borrowed':
+            return HttpResponseRedirect(reverse('quizzes') )
+
+    # Если это GET (или какой-либо ещё), создать форму по умолчанию.
+    else:
+        proposed_renewal_name = ""
+        form = RenewQuizForm(initial={'renewal_name': proposed_renewal_name,})
+
+    return render(request, 'quizzes_renew.html', {'form': form, 'quizinst':quiz_inst})
