@@ -129,3 +129,24 @@
     left: 0;
     top: 0;
 }
+
+.form-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    min-height: 400px;
+    left: 20%;
+    top: 20%;
+    margin-top: 10%;
+    padding: 50px 50px 50px 50px;
+
+    /*transform: translate(-50%, -50%);*/
+
+
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    /*border: 1px solid red;*/
+    border-radius: 30px;
+}

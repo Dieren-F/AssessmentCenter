@@ -1,11 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from .models import quizzes, editors, questions, answers, assignment, results
 from django.http.response import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.models import User
 
+from .models import quizzes
 from .forms import RenewQuizForm
 
 def handler404(request, *args, **kwargs):
@@ -83,3 +86,19 @@ def renew_quiz(request, quizid):
         form = RenewQuizForm(initial={'renewal_name': proposed_renewal_name,})
 
     return render(request, 'quizzes_renew.html', {'form': form, 'quizinst':quiz_inst})
+
+class QuizCreate(LoginRequiredMixin, CreateView):
+    model = quizzes
+    fields = ('quizname', 'clientID')
+    success_url = reverse_lazy('quizzes')
+    #initial={'clientID':User,}
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        #for providing initial values to the form
+        initial['clientID'] = self.request.user.id 
+        return initial.copy()
+
+class QuizDelete(DeleteView):
+    model = quizzes
+    success_url = reverse_lazy('quizzes')
