@@ -150,3 +150,19 @@
     /*border: 1px solid red;*/
     border-radius: 30px;
 }
+
+.questions-container {
+    flex-direction: column;
+    width: 100%;
+    height: 80%;
+}
+
+.question-item {
+    flex-direction: row;
+    width: 100%;
+    display: flex;
+}
+
+.question-menu {
+    width: 128px;
+}

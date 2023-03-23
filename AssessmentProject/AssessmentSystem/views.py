@@ -102,3 +102,24 @@ class QuizCreate(LoginRequiredMixin, CreateView):
 class QuizDelete(DeleteView):
     model = quizzes
     success_url = reverse_lazy('quizzes')
+
+class questionhtmllist(LoginRequiredMixin, generic.ListView):
+    models = questions
+
+    def get_queryset(self):
+        return questions.objects.filter(quizID=self.kwargs["QuizNumber"])
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Добавляем новую переменную к контексту и инициализируем её некоторым значением
+        context['QuizNumber'] = self.kwargs["QuizNumber"]
+        return context
+    
+class QuestionCreate(LoginRequiredMixin, CreateView):
+    model = questions
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('questions', kwargs={'QuizNumber': self.kwargs["QuizNumber"]})
+
+    

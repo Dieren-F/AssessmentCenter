@@ -9,6 +9,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('quizzes', views.quizzhtmllist.as_view(), name='quizzes'),
     path('addquiz', views.QuizCreate.as_view(), name='quizcreate'),
+    re_path(r'questions/(?P<QuizNumber>\d+)$', views.questionhtmllist.as_view(), name='questions'),
+    re_path(r'questions/(?P<QuizNumber>\d+)/addquestion/?$', views.QuestionCreate.as_view(), name='addquestion'),
     re_path(r'^api/getquizzes/(?P<QuizNumber>\d+)$', views.QuizzesList.as_view(), name='QuizzesList'),
 ]
 

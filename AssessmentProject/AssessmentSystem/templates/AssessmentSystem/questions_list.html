@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Questions List</h1>
+    <div class="question-container">
+      {% if questions_list %}
+
+        {% for question in questions_list %}
+          <div class="question-item">              
+            <div class="question-menu" id="edit{{question.id}}">
+              <a href="editquestion/{{question.id}}"><img src="../../static/img/iconedit.png"></a>
+              <a href="delquestion/{{question.id}}"><img src="../../static/img/icondel.png"></a>
+            </div>{{question.sequence}} &nbsp; {{ question.question }}
+          </div>
+        {% endfor %}
+      {% else %}
+      <div class="question-item">no questions yet</div>
+      {% endif %}
+      <div class="question-item"><a href="{{QuizNumber}}/addquestion/{{quiz.id}}">Add question</a></div>
+    </div>
+{% endblock %}
