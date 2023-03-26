@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import quizzes, editors, questions, answers, assignment, results
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.http import JsonResponse
@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 
 from .models import quizzes
-from .forms import RenewQuizForm
+from .forms import RenewQuizForm, QuestionCreateForm
 
 def handler404(request, *args, **kwargs):
     return HttpResponseRedirect('/')
@@ -117,9 +117,34 @@ class questionhtmllist(LoginRequiredMixin, generic.ListView):
     
 class QuestionCreate(LoginRequiredMixin, CreateView):
     model = questions
-    fields = '__all__'
+    form_class = QuestionCreateForm
+    #fields = '__all__'
 
     def get_success_url(self):
         return reverse_lazy('questions', kwargs={'QuizNumber': self.kwargs["QuizNumber"]})
+"""
+def create_question(request, QuizNumber):
+    quiz_inst = get_object_or_404(quizzes, id=QuizNumber)
 
-    
+    # Если данный запрос типа POST, тогда
+    if request.method == 'POST':
+
+        # Создаём экземпляр формы и заполняем данными из запроса (связывание, binding):
+        form = CreateQuestion(request.POST)
+
+        # Проверка валидности данных формы:
+        if form.is_valid():
+            # Обработка данных из form.cleaned_data
+            #(здесь мы просто присваиваем их полю due_back)
+            quiz_inst.quizname = form.cleaned_data['renewal_name']
+            quiz_inst.save()
+
+            # Переход по адресу 'all-borrowed':
+            return HttpResponseRedirect(reverse('quizzes') )
+        
+    # Если это GET (или какой-либо ещё), создать форму по умолчанию.
+    else:
+        form = CreateQuestion(initial={'quizID': QuizNumber,})
+
+    return render(request, 'questions_form.html', {'form': form})
+"""

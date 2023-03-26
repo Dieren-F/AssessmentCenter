@@ -36,15 +36,23 @@ class editors(models.Model):
     clientID = models.ForeignKey(User, on_delete=models.CASCADE)
     quizID = models.ForeignKey(quizzes, on_delete=models.CASCADE)
 
+class qtypes(models.Model):
+
+    # Fields
+    typename = models.CharField(max_length=30, help_text="Question type") #один ответ; несколько ответов; значения с клавиатуры;
+
+    def __str__(self):
+        return self.typename
+
 class questions(models.Model):
 
     # Fields
     question = models.CharField(max_length=1024, help_text="Question")
-    qtype = models.PositiveSmallIntegerField(default=0, help_text="Type of question")#not sure
     sequence = models.IntegerField(default=0, help_text="Order for submitting questions")
     version = models.IntegerField(default=0, help_text="Test version")
     weight = models.FloatField(default=0, help_text="Test version")
     quizID = models.ForeignKey(quizzes, on_delete=models.CASCADE)
+    qtypesID = models.ForeignKey(qtypes, on_delete=models.CASCADE, help_text="Type of question")
 
 class answers(models.Model):
 

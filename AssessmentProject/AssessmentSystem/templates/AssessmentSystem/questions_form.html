@@ -5,7 +5,9 @@
         <form action="" method="post">
             {% csrf_token %}
             <table>
-                {{ form }}
+                <div>Тип вопроса:&nbsp;{{ form.qtypesID }}</div>
+                <div>Вопрос:&nbsp;{{ form.question }}</div>
+                <div>Вес вопроса:&nbsp;{{ form.weight }}</div>
             </table>
             <input type="submit" value="Submit" />
         </form>
