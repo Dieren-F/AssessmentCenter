@@ -29,6 +29,9 @@ class quizzes(models.Model):
     countofquestions = models.IntegerField(default=0, help_text="ammount of questions in this test")
     clientID = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.id)
+
 class editors(models.Model):
 
     # Fields

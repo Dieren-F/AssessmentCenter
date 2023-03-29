@@ -114,14 +114,66 @@ class questionhtmllist(LoginRequiredMixin, generic.ListView):
         # Добавляем новую переменную к контексту и инициализируем её некоторым значением
         context['QuizNumber'] = self.kwargs["QuizNumber"]
         return context
+
+class QuestionDelete(LoginRequiredMixin, DeleteView):
+    model = questions
+    success_url = reverse_lazy('questions', kwargs={ "QuizNumber": 1 }) #reverse_lazy('questions')
     
 class QuestionCreate(LoginRequiredMixin, CreateView):
     model = questions
     form_class = QuestionCreateForm
     #fields = '__all__'
+    success_url = reverse_lazy('questions')
 
     def get_success_url(self):
         return reverse_lazy('questions', kwargs={'QuizNumber': self.kwargs["QuizNumber"]})
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['qtypesID'] = 1
+    #    #for providing initial values to the form
+    #    initial['quizID'] = self.kwargs['QuizNumber'] 
+        return initial.copy()
+
+    def form_invalid(self, form):
+        print("form is invalid")
+        return http.HttpResponse("form is invalid.. this is just an HttpResponse object")
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        instance = form.save(commit=False)
+        instance.sequence = 1
+        instance.version = 1
+        instance.quizID_id = self.kwargs['QuizNumber']
+        instance.save()
+        return super().form_valid(form) #redirect(self.get_success_url()) #super().form_valid(form)
+
+class QuestionUpdate(LoginRequiredMixin, UpdateView):
+    model = questions
+    form_class = QuestionCreateForm
+    #fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+    def get_success_url(self):
+        return reverse_lazy('questions', kwargs={'QuizNumber': self.kwargs["QuizNumber"]})
+
+    def form_invalid(self, form):
+        print("form is invalid")
+        return http.HttpResponse("form is invalid.. this is just an HttpResponse object")
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        instance = form.save(commit=False)
+        instance.sequence = 1
+        instance.version = 1
+        instance.quizID_id = self.kwargs['QuizNumber']
+        instance.save()
+        return super().form_valid(form) #redirect(self.get_success_url()) #super().form_valid(form)
+
+
+
 """
 def create_question(request, QuizNumber):
     quiz_inst = get_object_or_404(quizzes, id=QuizNumber)

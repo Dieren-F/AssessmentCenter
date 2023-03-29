@@ -14,7 +14,8 @@ class RenewQuizForm(forms.Form):
 class QuestionCreateForm(forms.ModelForm):
     class Meta:
         model = questions
-        fields= ('question', 'sequence', 'version', 'weight', 'quizID', 'qtypesID')
+        #fields= ('question', 'sequence', 'version', 'weight', 'quizID', 'qtypesID')
+        fields= ('question', 'weight', 'qtypesID')
         widgets = {
-            'question': forms.Textarea(attrs={"rows":3, "cols":30})
+            'question': forms.Textarea(attrs={"rows":3, "cols":30, "id":'smao'})
         }
