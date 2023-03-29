@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 
 from .models import quizzes
-from .forms import RenewQuizForm, QuestionCreateForm
+from .forms import RenewQuizForm, QuestionCreateForm, EditAnswers
 
 def handler404(request, *args, **kwargs):
     return HttpResponseRedirect('/')
@@ -173,30 +173,29 @@ class QuestionUpdate(LoginRequiredMixin, UpdateView):
         return super().form_valid(form) #redirect(self.get_success_url()) #super().form_valid(form)
 
 
-
-"""
-def create_question(request, QuizNumber):
-    quiz_inst = get_object_or_404(quizzes, id=QuizNumber)
+def edit_answers(request, QuizNumber, QuestNumber):
+    quest = get_object_or_404(questions, id=QuestNumber)
+    #quest = questions.objects.filter(id=QuestNuber)
+    answer = answers.objects.filter(questionID=QuestNumber)
 
     # Если данный запрос типа POST, тогда
-    if request.method == 'POST':
+    #if request.method == 'POST':
 
         # Создаём экземпляр формы и заполняем данными из запроса (связывание, binding):
-        form = CreateQuestion(request.POST)
+    form = EditAnswers(request.POST)
 
         # Проверка валидности данных формы:
-        if form.is_valid():
+        #if form.is_valid():
             # Обработка данных из form.cleaned_data
             #(здесь мы просто присваиваем их полю due_back)
-            quiz_inst.quizname = form.cleaned_data['renewal_name']
-            quiz_inst.save()
+            #quiz_inst.quizname = form.cleaned_data['renewal_name']
+            #quiz_inst.save()
 
             # Переход по адресу 'all-borrowed':
-            return HttpResponseRedirect(reverse('quizzes') )
+            #return HttpResponseRedirect(reverse('quizzes') )
         
     # Если это GET (или какой-либо ещё), создать форму по умолчанию.
-    else:
-        form = CreateQuestion(initial={'quizID': QuizNumber,})
+    #else:
+        #form = EditAnswers(initial={'quizID': QuizNumber,})
 
-    return render(request, 'questions_form.html', {'form': form})
-"""
+    return render(request, 'AssessmentSystem/answer_form.html', {'form': form, 'questions': quest, "answers_list": answer})

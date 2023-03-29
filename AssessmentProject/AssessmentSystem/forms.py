@@ -19,3 +19,10 @@ class QuestionCreateForm(forms.ModelForm):
         widgets = {
             'question': forms.Textarea(attrs={"rows":3, "cols":30, "id":'smao'})
         }
+
+class EditAnswers(forms.Form):
+    renewal_name = forms.CharField(max_length=50, help_text="Test name")
+
+    def clean_renew(self):
+        data = self.cleaned_data['renewal_name']
+        return data

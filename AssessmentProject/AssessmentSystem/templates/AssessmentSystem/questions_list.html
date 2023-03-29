@@ -10,7 +10,7 @@
             <div class="question-menu" id="edit{{question.id}}">
               <a href="{{question.quizID}}/editquestion/{{question.id}}"><img src="../../static/img/iconedit.png"></a>
               <a href="{{question.quizID}}/delquestion/{{question.id}}"><img src="../../static/img/icondel.png"></a>
-            </div>{{question.sequence}} &nbsp; {{ question.question }}
+            </div>{{question.sequence}} &nbsp; <a href="{{question.quizID}}/editanswers/{{question.id}}">{{ question.question }}</a>
           </div>
         {% endfor %}
       {% else %}

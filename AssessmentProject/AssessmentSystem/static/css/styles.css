@@ -166,3 +166,24 @@
 .question-menu {
     width: 128px;
 }
+
+.ask-conteiner {
+    position: relative;
+    width: 80%;
+    height: 10%;
+    min-height: 100px;
+    left: 20%;
+    top: 20%;
+    margin-top: 10%;
+    padding: 50px 50px 50px 50px;
+
+    /*transform: translate(-50%, -50%);*/
+
+
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    /*border: 1px solid red;*/
+    border-radius: 30px;
+}

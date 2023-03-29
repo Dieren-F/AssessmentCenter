@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    <div class="ask-conteiner">{{questions.question}}</div>
+    <div class="form-container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <table>
+                {% if answers_list %}
+
+                    {% for answer in answers_list %}
+                        <div class="question-item">
+                            {{answer.answer}}
+                        </div>
+                    {% endfor %}
+                {% else %}
+              <div class="question-item">no answers yet</div>
+              {% endif %}
+            </table>
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+
+{% endblock %}

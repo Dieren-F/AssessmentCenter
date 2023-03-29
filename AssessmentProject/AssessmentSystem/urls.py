@@ -22,6 +22,10 @@ urlpatterns = [
     re_path(r'^api/getquizzes/(?P<QuizNumber>\d+)$', views.QuizzesList.as_view(), name='QuizzesList'),
     re_path(r'^editquiz/(?P<quizid>[-\w]+)$', views.renew_quiz, name='renew-quiz'),
     re_path(r'^delquiz/(?P<pk>[-\w]+)$', views.QuizDelete.as_view(), name='delet-quiz'),
+
+
+    #work with answers
+    re_path(r'questions/(?P<QuizNumber>\d+)/editanswers/(?P<QuestNumber>[-\w]+)$', views.edit_answers, name='editanswers')
 ]
 
 #handler404 = 'views.handler404'
