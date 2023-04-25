@@ -1,0 +1,10 @@
+{%  extends "auth_generic.html"%}
+
+{% block content %}
+<div class="auth-box">
+    <div class="box-title">
+        Logged out!
+    </div>
+    <div class="box-form"><div class="box-link"><a href="{% url 'index'%}">Click here to login again.</a></div></div>
+</div>
+{% endblock %}

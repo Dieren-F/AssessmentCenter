@@ -1,43 +1,41 @@
-{% extends "base_generic.html" %}
+{%  extends "auth_generic.html"%}
 
 {% block content %}
 
-{% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-
-{% if next %}
-  {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-  {% else %}
-    <p>Please login to see this page.</p>
-  {% endif %}
-{% endif %}
-
-<div class="box">
+<div class="auth-box">
   <div class="box-container">
     <div class="box-title">Добро пожаловать в ассессмент центр!</div>
+    <div class="box-subtitle">Войдите, чтобы продолжить</div>
     <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
 
       <div class="box-form">
-        {{ form.username.label_tag }}
         {{ form.username }}
       </div>
       <div class="box-form">
-        {{ form.password.label_tag }}
         {{ form.password }}
       </div>
 
       <div class="box-form">
-        <input class="box-button" type="submit" value="Войти" />
+        <input class="box-button" type="submit" value="Войти" id="authsubmit" />
         <input type="hidden" name="next" value="{{ next }}" />
       </div>
     </form>
 
     {# Assumes you setup the password_reset view in your URLconf #}
-    <div class="box-form"><p><a href="{% url 'password_reset' %}">Lost password?</a></p></div>
+    <div class="box-form"><div class="box-link"><a href="{% url 'password_reset' %}">Забыли пароль?</a></div></div>
+    
+      {% if form.errors %}
+        <div class="error-message">Пароль или имя пользователя указаны неправильно!</div>
+      {% endif %}
+      {% if next %}
+        {% if user.is_authenticated %}
+          <div class="error-message">Your account doesn't have access to this page. To proceed,
+          please login with an account that has access.</div>
+        {% else %}
+          <div class="error-message">Please login to see this page.</p>
+        {% endif %}
+      {% endif %}
   </div>
 </div>
 

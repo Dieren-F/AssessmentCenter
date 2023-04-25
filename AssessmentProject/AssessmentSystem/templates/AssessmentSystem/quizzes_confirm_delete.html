@@ -4,8 +4,10 @@
     <div class="form-container">
         <form action="" method="post">
             {% csrf_token %}
-            do you want to delete this test?
-            <input type="submit" value="Submit" />
+            Удалить этот тест?<br />
+            Все вопросы и ответы включенные в тест будут удалены вместе с ним.<br />
+            <input type="submit" value="Удалить" class='btn btn-danger'/>
+            <a href="{% url 'quizzes' %}" class="btn btn-primary">Отмена</a>
         </form>
     </div>
 

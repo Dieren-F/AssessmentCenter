@@ -8,9 +8,12 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
   <!-- Добавление дополнительного статического CSS файла -->
   {% load static %}
+  <script src="{% static 'js/main.js'%}"></script>
+  <link type="image/png" sizes="16x16" rel="icon" type="image/x-icon" href="{% static 'img/icons8-globe-gradient-16.png' %}">
+  <link type="image/png" sizes="32x32" rel="icon" type="image/x-icon" href="{% static 'img/icons8-globe-gradient-32.png' %}">
+  <link type="image/png" sizes="96x96" rel="icon" type="image/x-icon" href="{% static 'img/icons8-globe-gradient-96.png' %}">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
@@ -19,16 +22,50 @@
   <div class="container-fluid">
 
     <div class="row">
+      <div class="caption"><div id="maintitle">Ассессмент-центр</div>
+      <div id="outicon"><a href="{% url 'index' %}accounts/logout"><img src="{% static 'img/logout.png' %}"></a></div></div>
       <div class="col-sm-2">
-      {% block sidebar %}
-      <ul class="sidebar-nav">
-          <li><a href="{% url 'index' %}">Home</a></li>
+        {% block sidebar %}
           {% if user.is_authenticated %}
-          <li><a href="{% url 'index' %}quizzes">quizzes</a></li>
-          <li><a href="{% url 'index' %}accounts/logout">Logout</a></li>
+            
+            <a href="{% url 'index' %}asigments" class="menuhrefitem">
+              <div class="mainmenuitem">
+                <span class="menutxt">Назначения тестов</span>
+                <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+              </div>
+            </a>
+
+            <a href="{% url 'index' %}clients" class="menuhrefitem">
+              <div class="mainmenuitem">
+                <span class="menutxt">Список клиентов</span>
+                <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+              </div>
+            </a>
+
+            <a href="{% url 'index' %}quizzes" class="menuhrefitem">
+              <div class="mainmenuitem">
+                <span class="menutxt">Тесты</span>
+                <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+              </div>
+            </a>
+
+            <a href="{% url 'index' %}profile" class="menuhrefitem">
+              <div class="mainmenuitem">
+                <span class="menutxt">Настройки администратора</span>
+                <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+              </div>
+            </a>
+
+            <div class="mainmenulastitem" id="lastmitem"></div>
           {%else%}
-          <li><a href="{% url 'index' %}accounts/login">Login</a></li>
-          {% endif %}
+            <a href="{% url 'index' %}accounts/login" class="menuhrefitem">
+              <div class="mainmenuitem">
+                <span class="menutxt">Вход в систему</span>
+                <span class="menudec"><img src="../static/img/menuarrow.png" width="32px"></span>
+              </div>
+            </a>
+            <div class="mainmenulastitem" id="lastmitem"></div>
+            {% endif %}
       </ul>
      {% endblock %}
       </div>

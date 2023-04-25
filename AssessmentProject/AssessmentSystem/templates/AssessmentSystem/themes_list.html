@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Themes List</h1>
+    <div class="theme-container">
+      {% if themes_list %}
+
+        {% for theme in themes_list %}
+          <div class="theme-item">
+            <div class="theme-icon"><img src="../../static/img/icon1.png" width=64 height=64></div>
+            <div class="theme-title">{{ theme.themename }}</div>
+          </div>
+        {% endfor %}
+
+      {% endif %}
+      <div class="theme-item">
+        <div class="theme-icon"><img src="../../static/img/iconadd.png" width=64 height=64></div>
+        <div class="theme-title">Добавить</div>
+      </div>
+    </div>
+{% endblock %}

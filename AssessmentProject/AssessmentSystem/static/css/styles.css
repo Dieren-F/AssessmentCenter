@@ -1,32 +1,102 @@
+html, body { height: 100%; }
+/*установка для тега body*/
+.main-page {
+    background-image: url(../img/ghjtrn.png);
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/*Установка для окна авторизации и всех связанных с эти сообщений*/
+.auth-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 500px;
+    min-height: 500px;
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: 30px;
+    padding: 40px 10px 40px 10px;
+}
+/*Верхняя зеленая полоса с названием и кнопкой выхода */
+.caption{
+    width: 100%;
+    height: 70px;
+    background: rgba(34, 110, 38, 0.7);
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+#maintitle{
+    justify-content: left;
+    font-family: 'Inter';
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 44px;
+    margin-left: 40px;
+}
+#outicon{
+    margin: 0px 40px 0px auto;
+}
+/*Конец стилей для верхней зеленой полосы*/
+
+/*1. Стили для меню слева*/
+.col-sm-2{
+    padding: 0px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+/*1.1 Стиль для одного пункта меню*/
+.mainmenuitem{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    background: rgba(34, 110, 38, 0.7);
+    backdrop-filter: blur(2px);
+    min-height: 100px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 16px;
+    color: black;
+    border-bottom: 1px solid black;
+}
+.mainmenulastitem{
+    background: rgba(34, 110, 38, 0.7);
+    backdrop-filter: blur(2px);
+}
 .sidebar-nav {
-    margin-top: 20px;
-    padding: 0;
     list-style: none;
 }
 
-.box {
-    /* Rectangle 1 */
-
-
-    position: relative;
-    width: 400px;
-    height: 400px;
-    min-height: 400px;
-    left: 20%;
-    top: 20%;
-    margin-top: 10%;
-    padding: 50px 50px 50px 50px;
-
-    /*transform: translate(-50%, -50%);*/
-
-
-    background: rgba(248, 245, 245, 0.7);
-    backdrop-filter: blur(2px);
-    /* Note: backdrop-filter has minimal browser support */
-
-    /*border: 1px solid red;*/
-    border-radius: 30px;
+/*Текст в меню*/
+.menutxt{
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 22px;
+    margin: auto auto auto 20px;
 }
+/*Стрелочка в меню*/
+.menudec{
+    margin: auto 10px auto 0px;
+}
+a.menuhrefitem:hover{
+    text-decoration: none;
+}
+/*Конец определения стилей для меню слева*/
+
+/*Задайт параметры для окна с основным содержимым*/
+.col-sm-10{
+    background-color: rgb(177, 177, 177);
+    height: calc(100vh - 70px);
+}
+/*Основное содержимое опеределено*/
 
 .box-conteiner {
     display: flex;
@@ -35,16 +105,25 @@
 
 .box-title {
     /* Добро пожаловать в ассессмент центр! */
-
     font-family: 'Inter';
     font-style: italic;
     font-weight: 700;
-    font-size: 36px;
+    font-size: 20px;
     line-height: 44px;
     text-align: center;
+    color: #2e2c25;
+    mix-blend-mode: normal;
+}
 
-    color: #4F4C3F;
-
+.box-subtitle {
+    /* Войдите, чтобы продолжить< */
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 44px;
+    text-align: center;
+    color: #696253;
     mix-blend-mode: normal;
 }
 
@@ -52,11 +131,33 @@
     font-style: italic;
 }
 
-.main-page {
-    background-image: url(../img/ghjtrn.png);
-    background-position: center;
-    background-repeat: no-repeat;
+input#id_username{
+    margin: 50px 40px 0px 40px;
+    border: 0px;
+    border-bottom: 1px solid navy;
+    background: url(../img/authlogin.png) no-repeat scroll 3px 3px;
+    padding-left:30px;
+    width: calc(100% - 80px);
 }
+input#id_username:focus { 
+    outline: none !important;
+    border-color: #719ECE;
+    box-shadow: 0 0 10px #719ECE;
+ }
+
+ input#id_password{
+    margin: 20px 40px 0px 40px;
+    border: 0px;
+    border-bottom: 1px solid navy;
+    background: url(../img/authpassword.png) no-repeat scroll 3px 3px;
+    padding-left:30px;
+    width: calc(100% - 80px);
+}
+input#id_password:focus { 
+    outline: none !important;
+    border-color: #719ECE;
+    box-shadow: 0 0 10px #719ECE;
+ }
 
 .box-button {
     width: 151px;
@@ -64,14 +165,28 @@
     left: 645px;
     top: 590px;
     display: block;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
 
     background: #3096CF;
     border-radius: 30px;
     border: 2px solid rgba(248, 245, 245, 0.7);
+    font-weight: bold;
 
-    color:rgba(248, 245, 245, 0.7);
+    color:white;
+}
+
+.box-link{
+    display: flex;
+    justify-content: center;
+}
+
+.error-message{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    color: #ee5252;
 }
 
 .quiz-item {
@@ -90,6 +205,13 @@
     /* Note: backdrop-filter has minimal browser support */
 
     border-radius: 30px;
+    cursor: pointer;
+}
+
+a.quiz-add-item
+{
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .quiz-container {
@@ -132,12 +254,10 @@
 
 .form-container {
     position: relative;
-    width: 400px;
-    height: 400px;
-    min-height: 400px;
-    left: 20%;
-    top: 20%;
-    margin-top: 10%;
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+    margin: 50px 50px 50px 50px;
     padding: 50px 50px 50px 50px;
 
     /*transform: translate(-50%, -50%);*/
@@ -147,7 +267,7 @@
     backdrop-filter: blur(2px);
     /* Note: backdrop-filter has minimal browser support */
 
-    /*border: 1px solid red;*/
+    border: 2px solid black;
     border-radius: 30px;
 }
 
@@ -167,15 +287,11 @@
     width: 128px;
 }
 
-.ask-conteiner {
+.ask-container {
     position: relative;
-    width: 80%;
-    height: 10%;
-    min-height: 100px;
-    left: 20%;
-    top: 20%;
-    margin-top: 10%;
+    margin: 10px 10px 10px 10px;
     padding: 50px 50px 50px 50px;
+
 
     /*transform: translate(-50%, -50%);*/
 
@@ -184,6 +300,37 @@
     backdrop-filter: blur(2px);
     /* Note: backdrop-filter has minimal browser support */
 
-    /*border: 1px solid red;*/
     border-radius: 30px;
+    border: 2px solid black;
+
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 700;
+    font-size: 22px;
+}
+.ask-edit-container
+{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 10px 10px 10px 10px;
+    padding: 10px 20px 10px 20px;
+    width: 90%;
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: 30px;
+    border: 2px solid black;
+}
+
+.ask-edit_append
+{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+
+.ask-edit-helper
+{
+    color: #c9c9c9;
+    margin: auto auto auto 10px;
 }

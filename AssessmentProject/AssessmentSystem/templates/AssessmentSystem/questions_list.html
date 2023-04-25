@@ -1,21 +1,65 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Questions List</h1>
+    <h1>Список вопросов к тесту {{quiz}}</h1>
     <div class="question-container">
+      <div class="question-item">
+        <a type="button" class="btn btn-primary" href="{% url 'quizzes' %}">Вернуться к списку тестов</a>&nbsp;
+        <a type="button" class="btn btn-primary" href="{{QuizNumber}}/addquestion/{{quiz.id}}">Добавить вопрос</a>
+      </div>
+      <div class="table-responsive card mt-4">
       {% if questions_list %}
 
+      <table class="table card-header">
+        <thead class="text-secondary">
+          <th>Номер</th>
+            <th>Порядок <span style="color: red;" class="required">*</span></th>
+            <th>Вопрос <span style="color: red;" class="required">*</span></th>
+            <th>Редактировать</th>
+            <th>Удалить</th>
+        </thead>
+        <tbody id="item-questions">
         {% for question in questions_list %}
-          <div class="question-item">              
-            <div class="question-menu" id="edit{{question.id}}">
-              <a href="{{question.quizID}}/editquestion/{{question.id}}"><img src="../../static/img/iconedit.png"></a>
-              <a href="{{question.quizID}}/delquestion/{{question.id}}"><img src="../../static/img/icondel.png"></a>
-            </div>{{question.sequence}} &nbsp; <a href="{{question.quizID}}/editanswers/{{question.id}}">{{ question.question }}</a>
-          </div>
+          <tr>
+            <td>{{question.id}}</td>
+            <td>{{question.sequence}}</td>
+            <td>{{ question.question }}</td>
+            <td><a type="button" class="btn btn-primary" href="{{question.quizID}}/editquestion/{{question.id}}">Ответы</a></td>
+            <td>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{question.id}}">
+                  Удалить
+              </button>
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal{{question.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{question.id}}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel{{question.id}}">Вы уверены что хотите удалить этот вопрос?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{% url 'deletequestion' QuizNumber question.id %}" type="button" class="btn btn-primary">Да, удалить</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+              
+            </td>
+          </tr>
         {% endfor %}
+        </tbody>
+      </table>
+      <div class="question-menu" id="edit{{question.id}}">
+              
+      </a>
+    </div> &nbsp; <a href="{{question.quizID}}/editquestion/{{question.id}}">{{ question.question }}</a>
       {% else %}
-      <div class="question-item">no questions yet</div>
+        <div class="question-item">Вопросы к этому тесту ещё не добавлены.</div>
       {% endif %}
-      <div class="question-item"><a href="{{QuizNumber}}/addquestion/{{quiz.id}}">Add question</a></div>
+        </div>
+      
     </div>
 {% endblock %}

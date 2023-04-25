@@ -1,0 +1,98 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<form enctype="multipart/form-data" class="container" method="post" id="product_form">
+    {% csrf_token %}
+    <div class="ask-edit-container">
+        {{ form.question }}
+        <div class="ask-edit_append">
+            {{ form.qtypesID }}
+            {{ form.weight }}
+            <div class="ask-edit-helper">Укажите тип и вес вопроса.</div>
+        </div>
+     </div>
+
+    {% with named_formsets.answers as formset %}
+        {{ formset.management_form }}
+        <script type="text/html" id="answers-template"> 
+            <tr id="answers-__prefix__" class= hide_all>
+                {% for fields in formset.empty_form.hidden_fields %}
+                    {{ fields }}
+                {% endfor %}
+            
+                {% for fields in formset.empty_form.visible_fields %}
+                    <td>{{fields}}</td>
+                {% endfor %}
+            </tr>
+        </script>
+        <div class="table-responsive card mt-4">
+            <div>
+                <a href="{% url 'questions' QuizNumber %}" type="button" class="btn btn-primary">Вернуться к списку вопросов</a>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                {% if QuestNumber%}
+                    <a href="" id="add-answer-button" class="btn btn-primary add-answers">Добавить ответ</a> <!-- id="add-inlineformsetname-button" -->
+                {% endif %}
+                <h4>Список ответов к этому вопросу:</h4>
+            </div>
+            <table class="table card-header">
+                <thead class="text-secondary">
+                    <th>Ответ <span style="color: red;" class="required">*</span></th>
+                    <th colspan=2>Правильный <span style="color: red;" class="required">*</span></th>
+                    <th>Удалить несколько</th>
+                    <th>Удалить один</th>
+                </thead>
+                <tbody id="item-answers">  <!-- id="item-inlineformsetname" -->
+                    <!-- formset non forms errors -->
+                    {% for error in formset.non_form_errors %}
+                        <span style="color: red">{{ error }}</span>
+                    {% endfor %}
+                    {% for formss in formset %}
+                        {{ formss.management_form }}
+                        <tr id="answer-{{ forloop.counter0 }}" class= hide_all>  <!-- id="inlineformsetname-counter" -->
+                            {{ formss.id }}
+                            {% comment %} {%  for field in formss.visible_fields %}{%endcomment%}
+                            {%  for field in formss.visible_fields%}
+                                <td>
+                                    {{field}}
+                                    {% for error in field.errors %}
+                                        <span style="color: red">{{ error }}</span>
+                                    {% endfor %}
+                                    
+                                </td>
+                            {% endfor %}
+                            {% comment %} {{ field.DELETE }} {% endcomment %}
+                            {% comment %} for delete {% endcomment %}
+                            {% if formss.instance.pk %}
+                                <td>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{formss.instance.pk}}">
+                                        Удалить
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal{{formss.instance.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{formss.instance.pk}}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel{{formss.instance.pk}}">Вы уверены что хотите удалить этот ответ?</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="{% url 'deleteanswer' QuizNumber QuestNumber formss.instance.pk %}" type="button" class="btn btn-primary">Да, удалить</a>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </td>            
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% endwith %}
+</form>
+        
+{% endblock content %}
