@@ -1,8 +1,10 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import quizzes, editors, questions, answers, assignment, results
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.views import generic
+from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -84,7 +86,7 @@ class QuizUpdate(LoginRequiredMixin, UpdateView):
         initial['clientID'] = self.request.user.id 
         return initial.copy()
 
-class QuizDelete(DeleteView):
+class QuizDelete(LoginRequiredMixin, DeleteView):
     model = quizzes
     success_url = reverse_lazy('quizzes')
 
@@ -223,11 +225,52 @@ class QuestionUpdate(LoginRequiredMixin, QuestionInline, UpdateView):
         return {
             'answers': AnswersFormSet(self.request.POST or None, self.request.FILES or None, instance=self.object, prefix='answers'),
         }
+
+class assigmentslist(LoginRequiredMixin, generic.ListView):
+    models = assignment
+
+    def get_queryset(self):
+        assignment_list = assignment.objects.filter(clientID_id=self.request.user.id).order_by('-id')
+        return assignment_list
+
+class assigmentcreate(LoginRequiredMixin, CreateView):
+    models = assignment
+    template_name = "AssessmentSystem/assigments_add.html"
+    fields = '__all__'
+    success_url = reverse_lazy('assigments')
+    #initial={'clientID':User,}
     
+    def get_initial(self):
+        initial = super().get_initial()
+        #for providing initial values to the form
+        initial['clientID'] = self.request.user.id 
+        return initial.copy()
+    
+    def get_queryset(self):
+        assignment_list = assignment.objects.filter(clientID_id=self.request.user.id).order_by('-id')
+        return assignment_list
+    
+class editassigment(LoginRequiredMixin, UpdateView):
+    models = assignment
+    template_name = "AssessmentSystem/assigments_add.html"
+    fields = '__all__'
+    success_url = reverse_lazy('assigments')
+
+    def get_queryset(self):
+        assignment_list = assignment.objects.filter(id=self.kwargs["pk"])
+        return assignment_list
+    
+class deleteassigment(LoginRequiredMixin, DeleteView):
+    models = assignment
+    template_name = "AssessmentSystem/assigment_confirm_delete.html"
+    fields = '__all__'
+    success_url = reverse_lazy('assigments')
+
+    def get_queryset(self):
+        assignment_list = assignment.objects.filter(id=self.kwargs["pk"])
+        return assignment_list
 
 #Lines below are for custom functions
-
-
 def delete_one_question(request, QuizNumber, pk):
     """Function for deleting questions"""
     try:
@@ -316,3 +359,57 @@ def renew_quiz(request, quizid):
         form = RenewQuizForm(initial={'renewal_name': proposed_renewal_name,})
 
     return render(request, 'quizzes_renew.html', {'form': form, 'quizinst':quiz_inst})
+
+#test loader
+@login_required
+def load_test(request, AssignmentNumber):
+    data = {}
+    assignment_point = assignment.objects.filter(id=AssignmentNumber).first()
+    data['assignment'] = AssignmentNumber
+    data['duration'] = assignment_point.duration
+    data['quizname'] = assignment_point.quizID.quizname
+    data['quizid'] = assignment_point.quizID_id
+    data['randomseq'] = assignment_point.randomseq
+    data['randomver'] = assignment_point.randomver
+    data['questions'] = []
+    questions_list = questions.objects.filter(quizID_id = assignment_point.quizID_id)
+    for question in questions_list:
+        data['questions'] .append(
+            {
+                'questid':question.id,
+                'question':question.question,
+                'type':question.qtypesID.id,
+                'answers':[{'answerid':answer.id, 'answer':answer.answer} for answer in answers.objects.filter(questionID_id=question.id)]
+            }
+        )
+        
+    return JsonResponse(data) #HttpResponse(data, content_type="application/json")
+
+#this function update count of attempts
+@login_required
+def attempt_started(request, AssignmentNumber):
+    attemp = get_object_or_404(assignment, id=AssignmentNumber)
+    attemp.attempts -= 1
+    attemp.resultready = True
+    attemp.save()
+    return JsonResponse({'status': 'success'})
+
+#@login_required
+def results_save(request):
+    #resdb = get_object_or_404(results, id=0)
+
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        
+        for k in body:
+            result = results()
+            result.assignmentID_id = body[k]['assignmentid']
+            result.questionID_id = body[k]['questid']
+            result.answerID_id = body[k]['answer']
+            result.qtypeID = body[k]['type']
+            result.value = body[k]['value']
+            result.save(force_insert=True)
+    else:
+        return JsonResponse({'status': 'fail'})
+
+    return JsonResponse({'status': 'success'})

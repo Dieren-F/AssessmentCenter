@@ -89,7 +89,7 @@ DATABASES = {
         "USER": "postgres",
         "PASSWORD": "postgrespw",
         "HOST": "host.docker.internal",
-        "PORT": 32768,
+        "PORT": 32769,
 #        "PORT": 5432,
     }
 }

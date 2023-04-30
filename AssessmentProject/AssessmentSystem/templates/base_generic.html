@@ -27,31 +27,45 @@
       <div class="col-sm-2">
         {% block sidebar %}
           {% if user.is_authenticated %}
-            
-            <a href="{% url 'index' %}asigments" class="menuhrefitem">
+            {% if user.is_superuser %}
+              <a href="{% url 'index' %}assignquiz" class="menuhrefitem">
+                <div class="mainmenuitem">
+                  <span class="menutxt">Назначения тестов</span>
+                  <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+                </div>
+              </a>
+
+              <a href="{% url 'index' %}clients" class="menuhrefitem">
+                <div class="mainmenuitem">
+                  <span class="menutxt">Список клиентов</span>
+                  <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+                </div>
+              </a>
+
+              <a href="{% url 'index' %}quizzes" class="menuhrefitem">
+                <div class="mainmenuitem">
+                  <span class="menutxt">Конструктор тестов</span>
+                  <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+                </div>
+              </a>
+
+              <a href="{% url 'index' %}profile" class="menuhrefitem">
+                <div class="mainmenuitem">
+                  <span class="menutxt">Настройки администратора</span>
+                  <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+                </div>
+              </a>
+            {% endif %}
+            <a href="{% url 'index' %}assigments" class="menuhrefitem">
               <div class="mainmenuitem">
-                <span class="menutxt">Назначения тестов</span>
+                <span class="menutxt">Назначенные тесты</span>
                 <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
               </div>
             </a>
 
-            <a href="{% url 'index' %}clients" class="menuhrefitem">
+            <a href="{% url 'index' %}results" class="menuhrefitem">
               <div class="mainmenuitem">
-                <span class="menutxt">Список клиентов</span>
-                <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
-              </div>
-            </a>
-
-            <a href="{% url 'index' %}quizzes" class="menuhrefitem">
-              <div class="mainmenuitem">
-                <span class="menutxt">Тесты</span>
-                <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
-              </div>
-            </a>
-
-            <a href="{% url 'index' %}profile" class="menuhrefitem">
-              <div class="mainmenuitem">
-                <span class="menutxt">Настройки администратора</span>
+                <span class="menutxt">Результаты</span>
                 <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
               </div>
             </a>

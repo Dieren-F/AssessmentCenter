@@ -30,7 +30,18 @@ urlpatterns = [
     re_path(r'^api/getquizzes/(?P<QuizNumber>\d+)$', views.QuizzesList.as_view(), name='QuizzesList'),
 
     #work with answers
-    re_path(r'questions/(?P<QuizNumber>\d+)/editanswers/(?P<QuestNumber>[-\w]+)$', views.edit_answers, name='editanswers')
+    re_path(r'questions/(?P<QuizNumber>\d+)/editanswers/(?P<QuestNumber>[-\w]+)$', views.edit_answers, name='editanswers'),
+
+    #work with assigments
+    path('assigments', views.assigmentslist.as_view(), name='assigments'),
+    path('assignquiz', views.assigmentcreate.as_view(), name='assignquiz'),
+    re_path(r'^assignedit/(?P<pk>[-\w]+)$', views.editassigment.as_view(), name='editassign'),
+    re_path(r'^assigndelete/(?P<pk>[-\w]+)$', views.deleteassigment.as_view(), name='deleteassign'),
+
+    #work with tests
+    re_path(r'test/(?P<AssignmentNumber>\d+)$', views.load_test, name='loadtest'),
+    re_path(r'attemptstarted/(?P<AssignmentNumber>\d+)$', views.attempt_started, name='teststarted'),
+    path(r'saveresults', views.results_save, name='saveresults'),
 ]
 
 #handler404 = 'views.handler404'

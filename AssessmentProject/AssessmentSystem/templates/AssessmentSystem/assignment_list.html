@@ -1,0 +1,51 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Вам назначены следующие тесты:</h1>
+    {% if user.is_authenticated and user.is_staff == True %}
+      <a href="{% url 'assignquiz' %}" type="button" class="btn btn-primary">Назначить тест</a>
+    {% endif %}
+    <table class="table card-header">
+      <thead class="text-secondary">
+          <th>Тест</th>
+          <th>Попыток</span></th>
+          <th>Длительность</th>
+          <th>Максимум баллов</th>
+          <th>&nbsp;</th>
+      </thead>
+      <tbody id="item-answers"> 
+    {% for assignment in assignment_list %}
+    <tr>
+      <td>{{ assignment.quizID.quizname }}</td>
+      <td>{{ assignment.attempts }}</td>
+      <td>
+        {% if assignment.duration%}
+          {{assignment.duration}}
+        {% else %}
+          Без таймера
+        {% endif%}
+      </td>
+      <td>{{ assignment.maxpoints }}</td>
+      <td>
+      {%if assignment.attempts %}
+      
+        {% load static %}
+        <script src="{% static 'js/bts.js'%}"></script>
+        <a href="javascript: bts({{assignment.id}}, '{{ csrf_token }}')" class="btn btn-primary">Пройти</a>
+      {%endif%}
+      </td>
+      <td>
+        {% if user.is_authenticated and user.is_staff == True %}
+          <a href="{% url 'editassign' assignment.id %}" type="button" class="btn btn-primary">Редактировать</a>
+        {% endif %}
+      </td>
+      <td>
+        {% if user.is_authenticated and user.is_staff == True %}
+          <a href="{% url 'deleteassign' assignment.id %}" type="button" class="btn btn-primary">Удалить</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor%}
+      </tbody>
+    </table>
+{% endblock %}

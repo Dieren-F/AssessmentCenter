@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    <div class="form-container">
+        <form action="" method="post">
+            {% csrf_token %}
+            Удалить это предписание?<br />
+            <input type="submit" value="Удалить" class='btn btn-danger'/>
+            <a href="{% url 'assigments' %}" class="btn btn-primary">Отмена</a>
+        </form>
+    </div>
+
+{% endblock %}

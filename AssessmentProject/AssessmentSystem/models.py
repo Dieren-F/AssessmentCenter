@@ -72,11 +72,13 @@ class assignment(models.Model):
     #datestart = models.DateTimeField(auto_now = True, help_text="Date when the assignment starts")
     #dateend = models.DateTimeField(auto_now = True, help_text="Date when the assignment ends")
     attempts = models.IntegerField(default=0, help_text="Number of attempts")
-    version = models.IntegerField(default=0, help_text="Test version")
-    randomseq = models.BooleanField(default=0, help_text="is sequence random")#not sure
-    randomver = models.BooleanField(default=0, help_text="is variant random")#not sure
+    version = models.IntegerField(default=0, help_text="Test version") # Necessary when quiz have several version for questions.
+    randomseq = models.BooleanField(default=0, help_text="is sequence random") # Necessary when questions must have random order
+    randomver = models.BooleanField(default=0, help_text="is variant random") # Necessary when questions must have random version
     maxpoints = models.IntegerField(default=0, help_text="maximum possible points")
     duration = models.IntegerField(default=0, help_text="duration of the test")
+    resultready = models.BooleanField(default=0, help_text="Test passed but dont calculated") # added later for testng system
+    currentpoints = models.IntegerField(default=0, help_text="Result of test in points") # added later for testng system
     clientID = models.ForeignKey(User, on_delete=models.CASCADE)
     quizID = models.ForeignKey(quizzes, on_delete=models.CASCADE)
 
@@ -86,3 +88,11 @@ class results(models.Model):
     #answerdate = models.DateTimeField(auto_now = True, help_text="Date of answer")
     assignmentID = models.ForeignKey(assignment, on_delete=models.CASCADE)
     questionID = models.ForeignKey(questions, on_delete=models.CASCADE)
+    qtypeID = models.IntegerField(default=0, help_text="Type of question") # added later for testng system
+    answerID = models.ForeignKey(answers, on_delete=models.CASCADE) # added later for testng system
+    value = models.CharField(default="0", max_length=255, help_text="Answer") # added later for testng system
+
+class textresult(models.Model):
+    sigmin = models.IntegerField(default=0, help_text="Result of test in points, lower bound") # added later for testng system
+    sigmax = models.IntegerField(default=0, help_text="Result of test in points, upper bound") # added later for testng system
+    description = models.CharField(default="There is no description for this number of points yet.", max_length=7168, help_text="Description of achievements") # added later for testng system
