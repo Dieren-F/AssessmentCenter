@@ -4,10 +4,18 @@
     <div class="form-container">
         <form action="" method="post">
             {% csrf_token %}
-            <h3>Наименование для теста</h3>
+            <h3>Назначить тест пользователю</h3>
             <div>
-                {{ form }}
-
+                <div>Пользователь: {{ form.clientID }}</div>
+                <div>Тест: {{ form.quizID }}</div>
+                <div>Количество попыток: {{ form.attempts }}</div>
+                <div>Длительность: {{ form.duration }}</div>
+                <div>Максимальный балл: {{ form.maxpoints }}</div>
+                <div>Набрано баллов: {{ form.currentpoints }}</div>
+                {{ form.version.as_hidden }}
+                {{ form.randomseq.as_hidden }}
+                {{ form.randomver.as_hidden }}
+                {{ form.resultready.as_hidden }}
                 <input type="submit" value="Сохранить" class="btn btn-primary"/>
                 <a href="{% url 'assigments' %}" type="button" class="btn btn-primary">Отмена</a>
             </div>

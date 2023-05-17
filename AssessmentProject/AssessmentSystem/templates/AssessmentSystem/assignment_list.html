@@ -7,45 +7,62 @@
     {% endif %}
     <table class="table card-header">
       <thead class="text-secondary">
+        {% if user.is_authenticated and user.is_staff == True %}
+          <th>Испытуемый</th>
+        {% endif %}
           <th>Тест</th>
           <th>Попыток</span></th>
           <th>Длительность</th>
           <th>Максимум баллов</th>
-          <th>&nbsp;</th>
+          <th>Набрано баллов</th>
+          <th cols=3>&nbsp;</th>
       </thead>
-      <tbody id="item-answers"> 
-    {% for assignment in assignment_list %}
-    <tr>
-      <td>{{ assignment.quizID.quizname }}</td>
-      <td>{{ assignment.attempts }}</td>
-      <td>
-        {% if assignment.duration%}
-          {{assignment.duration}}
-        {% else %}
-          Без таймера
-        {% endif%}
-      </td>
-      <td>{{ assignment.maxpoints }}</td>
-      <td>
-      {%if assignment.attempts %}
-      
-        {% load static %}
+      <tbody id="item-answers">
+        {% load static %} 
         <script src="{% static 'js/bts.js'%}"></script>
-        <a href="javascript: bts({{assignment.id}}, '{{ csrf_token }}')" class="btn btn-primary">Пройти</a>
-      {%endif%}
-      </td>
-      <td>
-        {% if user.is_authenticated and user.is_staff == True %}
-          <a href="{% url 'editassign' assignment.id %}" type="button" class="btn btn-primary">Редактировать</a>
-        {% endif %}
-      </td>
-      <td>
-        {% if user.is_authenticated and user.is_staff == True %}
-          <a href="{% url 'deleteassign' assignment.id %}" type="button" class="btn btn-primary">Удалить</a>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor%}
+        {% for assignment in assignment_list %}
+        <tr>
+          {% if user.is_authenticated and user.is_staff %}
+            <td>{{ assignment.clientID.first_name }} 
+                {{ assignment.clientID.last_name }}
+                ({{assignment.clientID.username}})</td>
+          {% endif %}
+          <td>{{ assignment.quizID.quizname }}</td>
+          <td>{{ assignment.attempts }}</td>
+          <td>
+            {% if assignment.duration%}
+              {{assignment.duration}}
+            {% else %}
+              Без таймера
+            {% endif%}
+          </td>
+          <td>{{ assignment.maxpoints }}</td>
+          <td>{{ assignment.currentpoints }}</td>
+          <td>
+          {% if user.id == assignment.clientID.id %}
+            {% if assignment.resultready %}
+              <a href="{% url 'getresult' assignment.id assignment.attempts %}" type="button" class="btn btn-primary">Узнать результат</a>
+            {%  else %}
+              {%if assignment.attempts %}
+                <a href="javascript: bts({{assignment.id}}, {{ assignment.attempts }},  '{{ csrf_token }}')" class="btn btn-primary">Пройти</a>
+              {%endif%}
+            {% endif %}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </td>
+          <td>
+            {% if user.is_authenticated and user.is_staff == True %}
+              <a href="{% url 'editassign' assignment.id %}" type="button" class="btn btn-primary">Редактировать</a>
+            {% endif %}
+          </td>
+          <td>
+            {% if user.is_authenticated and user.is_staff == True %}
+              <a href="{% url 'deleteassign' assignment.id %}" type="button" class="btn btn-danger">Удалить</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor%}
       </tbody>
     </table>
 {% endblock %}

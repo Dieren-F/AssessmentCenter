@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Описания для результатов тестов:</h1>
+      <a href="{% url 'resultcreate' %}" type="button" class="btn btn-primary">Добавить описание</a>
+    <table class="table card-header">
+      <thead class="text-secondary">
+          <th>Тест</th>
+          <th>Нижня граница</th>
+          <th>Верхняя граница</th>
+          <th cols=2>&nbsp;</th>
+      </thead>
+      <tbody id="item-results">
+        {% for oneresult in textresult_list %}
+        <tr>
+          <td>{{ oneresult.quizID.quizname }}</td>
+          <td>{{ oneresult.sigmin }}</td>
+          <td>{{ oneresult.sigmax }}</td>
+          <td><a href="{% url 'updateresult' oneresult.id %}" type="button" class="btn btn-primary">Редактировать</a></td>
+          <td><a href="{% url 'deleteresult' oneresult.id %}" type="button" class="btn btn-danger">Удалить</a></td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+{% endblock %}

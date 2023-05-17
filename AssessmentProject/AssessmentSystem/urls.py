@@ -37,11 +37,25 @@ urlpatterns = [
     path('assignquiz', views.assigmentcreate.as_view(), name='assignquiz'),
     re_path(r'^assignedit/(?P<pk>[-\w]+)$', views.editassigment.as_view(), name='editassign'),
     re_path(r'^assigndelete/(?P<pk>[-\w]+)$', views.deleteassigment.as_view(), name='deleteassign'),
+    re_path(r'^getresult/(?P<AssignmentNumber>\d+)/(?P<AttemptNumber>\d+)$', views.get_result, name='getresult'),
 
     #work with tests
     re_path(r'test/(?P<AssignmentNumber>\d+)$', views.load_test, name='loadtest'),
     re_path(r'attemptstarted/(?P<AssignmentNumber>\d+)$', views.attempt_started, name='teststarted'),
     path(r'saveresults', views.results_save, name='saveresults'),
+
+    #work with results
+    path('results', views.resultslist.as_view(), name='results'),
+    re_path(r'resultdetail/(?P<pk>\d+)$', views.resultsdetail.as_view(), name='resultdetail'),
+    path('createresult', views.createresult.as_view(), name='resultcreate'),
+    re_path(r'updateresult/(?P<pk>\d+)$', views.updateresult.as_view(), name='updateresult'),
+    path('editresults', views.editresults.as_view(), name='editresults'),
+    re_path(r'deleteresult/(?P<pk>\d+)$', views.deleteresult.as_view(), name='deleteresult'),
+
+    #work with clients
+    path('clients', views.userslist.as_view(), name='clients'),
+    path('clientcreate', views.usercreate.as_view(), name='clientcreate'),
+    re_path(r'clientupdate/(?P<pk>\d+)$', views.userupdate.as_view(), name='clientupdate'),
 ]
 
 #handler404 = 'views.handler404'

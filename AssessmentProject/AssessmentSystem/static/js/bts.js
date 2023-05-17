@@ -40,6 +40,7 @@ function show_q(id)
                         'questid': data['questions'][cur_id]['questid'],
                         'type': data['questions'][cur_id]['type'],
                         'answer': data['questions'][cur_id]['answers'][0]['answerid'],
+                        'attempt': settings['attempt'],
                         'value': ''
                     })
         }
@@ -72,6 +73,7 @@ function show_q(id)
                         'questid': data['questions'][cur_id]['questid'],
                         'type': data['questions'][cur_id]['type'],
                         'answer': element['answerid'],
+                        'attempt': settings['attempt'],
                         'value': 0
                     })
                 }
@@ -288,9 +290,10 @@ function starttest(shadow)
     show_q(settings['questcurr'])
 }
 
-function bts(testid, token)
+function bts(testid, attempt, token)
 {
     window.CSRF_TOKEN = token
+    settings['attempt'] = attempt
     if(document.getElementById('shadow'))document.getElementById('shadow').remove();
     const shadow = document.createElement('div')
     shadow.className = 'shadow-style'

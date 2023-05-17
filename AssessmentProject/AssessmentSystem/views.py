@@ -1,6 +1,9 @@
+import math
 import json
+import logging
+from django.db import connection
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import quizzes, editors, questions, answers, assignment, results
+from .models import quizzes, editors, questions, answers, assignment, results, textresult
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.views import generic
@@ -10,16 +13,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password, check_password
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 from .forms import (
-    QuestionForm, AnswersForm, AnswersFormSet
+    QuestionForm, AnswersForm, AnswersFormSet, ClientsForm, ClientUpdForm, ResultCreateForm
 )
 
 
 from .models import quizzes
 from .forms import RenewQuizForm, QuestionCreateForm, EditAnswers
+
+logger = logging.getLogger(__name__)
 
 def handler404(request, *args, **kwargs):
     return HttpResponseRedirect('/')
@@ -155,6 +161,7 @@ class QuestionCreate(LoginRequiredMixin, QuestionInline, CreateView):
     def get_initial(self):
         initial = super().get_initial()
         initial['qtypesID'] = 1
+        initial['weight'] = 1
     #    #for providing initial values to the form
     #    initial['quizID'] = self.kwargs['QuizNumber'] 
         return initial.copy()
@@ -230,7 +237,10 @@ class assigmentslist(LoginRequiredMixin, generic.ListView):
     models = assignment
 
     def get_queryset(self):
-        assignment_list = assignment.objects.filter(clientID_id=self.request.user.id).order_by('-id')
+        if(self.request.user.is_staff or self.request.user.is_superuser):
+            assignment_list = assignment.objects.order_by('-id')
+        else:
+            assignment_list = assignment.objects.filter(clientID_id=self.request.user.id).order_by('-id')
         return assignment_list
 
 class assigmentcreate(LoginRequiredMixin, CreateView):
@@ -244,6 +254,10 @@ class assigmentcreate(LoginRequiredMixin, CreateView):
         initial = super().get_initial()
         #for providing initial values to the form
         initial['clientID'] = self.request.user.id 
+        initial['version'] = 1
+        initial['randomseq'] = False
+        initial['randomver'] = False
+        initial['resultready'] = False
         return initial.copy()
     
     def get_queryset(self):
@@ -269,6 +283,159 @@ class deleteassigment(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         assignment_list = assignment.objects.filter(id=self.kwargs["pk"])
         return assignment_list
+
+class resultslist(LoginRequiredMixin, generic.ListView):
+    models = assignment
+    fields = '__all__'
+    template_name = "AssessmentSystem/results_list.html"
+
+    def get_queryset(self):
+        if(self.request.user.is_staff or self.request.user.is_superuser):
+            assignment_list = assignment.objects.filter(currentpoints__gt=0).order_by('-id')
+        else:
+            assignment_list = assignment.objects.filter(clientID_id=self.request.user.id, currentpoints__gt=0).order_by('-id')
+        return assignment_list
+    
+class resultsdetail(LoginRequiredMixin, generic.ListView):
+    models = textresult
+    fields = '__all__'
+    template_name = "AssessmentSystem/results_detail.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(resultsdetail, self).get_context_data(**kwargs)
+        ctx['result_detail'] = self.get_queryset()
+        logger.warning("ctx")
+        logger.warning(ctx['result_detail'])
+        return ctx
+
+    def get_queryset(self):
+        result_detail = textresult.objects.filter(sigmin__lt=self.kwargs["pk"],sigmax__gt=self.kwargs["pk"]).first()
+
+        return result_detail
+
+class userslist(LoginRequiredMixin, generic.ListView):
+    models = User
+    template_name = "AssessmentSystem/user_list.html"
+    fields = '__all__'
+    #success_url = reverse_lazy('assigments')
+
+    def get_queryset(self):
+        return User.objects.filter(is_superuser=False).order_by('-id')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Добавляем новую переменную к контексту и инициализируем её некоторым значением
+        context['itm_list'] = self.get_queryset()
+        #context['quiz'] = quizzes.objects.filter(id=self.kwargs["QuizNumber"]).values_list('quizname', flat=True).first()
+        return context
+    
+class usercreate(LoginRequiredMixin, CreateView):
+    models = User
+    template_name = "AssessmentSystem/client_add.html"
+    form_class = ClientsForm
+    success_url = reverse_lazy('clients')
+    #initial={'clientID':User,}
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        return initial.copy()
+    
+    def get_queryset(self):
+        return User.objects.filter(is_superuser=False)
+    
+    def form_valid(self, form):
+        request = self.request
+        if self.request.method == 'POST':
+            User.objects.create_user(
+                username = request.POST['username'],
+                password = request.POST['password'],
+                is_active = (True if request.POST.get('is_active', 'off')=='on' else False),
+                is_staff = (True if request.POST.get('is_staff', 'off')=='on' else False),
+                first_name = request.POST['first_name'],
+                last_name = request.POST['last_name'],
+                email = request.POST['email']
+            )
+            #User.objects.update_or_create()
+            logger.warning('user created')
+        return redirect(self.success_url) #super().form_valid(form)
+
+
+class userupdate(LoginRequiredMixin, UpdateView):
+    models = User
+    template_name = "AssessmentSystem/client_update.html"
+    form_class = ClientUpdForm
+    success_url = reverse_lazy('clients')
+    #initial={'clientID':User,}
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        return initial.copy()
+    
+    def get_queryset(self):
+        return User.objects.filter(id=self.kwargs["pk"], is_superuser=False)
+    
+    def form_valid(self, form):
+        request = self.request
+        if self.request.method == 'POST':
+            User.objects.filter(id = self.kwargs["pk"]).update(
+                username = request.POST['username'],
+                is_active = (True if request.POST.get('is_active', 'off')=='on' else False),
+                is_staff = (True if request.POST.get('is_staff', 'off')=='on' else False),
+                first_name = request.POST['first_name'],
+                last_name = request.POST['last_name'],
+                email = request.POST['email']
+            )
+            #User.objects.update_or_create()
+            logger.info('user created')
+        return redirect(self.success_url) #super().form_valid(form)
+
+class createresult(LoginRequiredMixin, CreateView):
+    models = textresult
+    template_name = "AssessmentSystem/textresult_add_update.html"
+    #fields = '__all__'
+    success_url = reverse_lazy('results')
+    form_class = ResultCreateForm
+    #initial={'clientID':User,}
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        #for providing initial values to the form
+        return initial.copy()
+    
+    def get_queryset(self):
+        return textresult.objects.filter(id=0)
+    
+class updateresult(LoginRequiredMixin, UpdateView):
+    models = textresult
+    template_name = "AssessmentSystem/textresult_add_update.html"
+    #fields = '__all__'
+    success_url = reverse_lazy('results')
+    form_class = ResultCreateForm
+    #initial={'clientID':User,}
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        #for providing initial values to the form
+        return initial.copy()
+    
+    def get_queryset(self):
+        return textresult.objects.filter(id=self.kwargs["pk"])
+    
+class editresults(LoginRequiredMixin, generic.ListView):
+    models = textresult
+
+    def get_queryset(self):
+        textresult_list = textresult.objects.all()
+        return textresult_list
+    
+class deleteresult(LoginRequiredMixin, DeleteView):
+    models = textresult
+    template_name = "AssessmentSystem/textresult_confirm_delete.html"
+    fields = '__all__'
+    success_url = reverse_lazy('editresults')
+
+    def get_queryset(self):
+        return textresult.objects.filter(id=self.kwargs["pk"])
 
 #Lines below are for custom functions
 def delete_one_question(request, QuizNumber, pk):
@@ -394,22 +561,81 @@ def attempt_started(request, AssignmentNumber):
     attemp.save()
     return JsonResponse({'status': 'success'})
 
-#@login_required
+@login_required
 def results_save(request):
     #resdb = get_object_or_404(results, id=0)
 
     if request.method == 'POST':
         body = json.loads(request.body)
-        
         for k in body:
             result = results()
             result.assignmentID_id = body[k]['assignmentid']
             result.questionID_id = body[k]['questid']
             result.answerID_id = body[k]['answer']
             result.qtypeID = body[k]['type']
+            result.attempt = body[k]['attempt']
             result.value = body[k]['value']
             result.save(force_insert=True)
     else:
         return JsonResponse({'status': 'fail'})
 
     return JsonResponse({'status': 'success'})
+
+@login_required
+def get_result(request, AssignmentNumber, AttemptNumber):
+    assignment_row = get_object_or_404(assignment, id=AssignmentNumber)
+    cursor = connection.cursor()
+    rawallpoints = 0
+
+    cursor.execute('''SELECT sum(qst.weight) \
+                        FROM public."AssessmentSystem_assignment" as ass inner join \
+                        public."AssessmentSystem_quizzes" as qzs on (ass."quizID_id"=qzs.id) inner join \
+                        public."AssessmentSystem_questions" as qst on (qzs.id=qst."quizID_id") \
+                        where ass.id = ''' + str(AssignmentNumber) + ''' group by qst."quizID_id"
+                    ''')
+    row = cursor.fetchone()
+    if(row):
+        rawallpoints = row[0]
+    else:
+        return redirect('assigments')
+
+    rawpoints = []
+    swpoint = 0
+    questid = -1
+    textquests = []
+    cursor.execute('''SELECT qst.id, qst.weight, ans.iscorrect, res.value, res."qtypeID" \
+                    from public."AssessmentSystem_questions" as qst inner join \
+                    public."AssessmentSystem_answers" as ans on (qst.id = ans."questionID_id") left join \
+                    public."AssessmentSystem_results" as res on (ans.id=res."answerID_id") \
+                    where   res."assignmentID_id"=''' + str(AssignmentNumber) + ''' and \
+                            res.attempt=''' + str(int(AttemptNumber)+1) + ''' \
+                    order by res."questionID_id" \
+                    ''')
+    for row in cursor.fetchall():
+        if(swpoint!=row[0]):
+            swpoint=row[0]
+            questid += 1
+            if(row[4] == 3):
+                rawpoints.append(0)
+            else:
+                rawpoints.append(row[1])
+        
+        if(row[4] == 1 and int(row[2])==1 or row[4] == 2):
+            if int(row[2])!=int(row[3]):
+                rawpoints[questid] = 0
+        if(row[4] == 3):
+            textquests.append((row[0], row[1], row[3]))
+    
+    
+    for vals in textquests:
+        cursor.execute('''SELECT id FROM public."AssessmentSystem_answers" where \'''' + str(vals[2]) + '''\' SIMILAR TO recorrect and "questionID_id" = '''  + str(vals[0]))
+        row = cursor.fetchone()
+        if row:
+            rawpoints.append(vals[1])
+
+
+    assignment_row.resultready = False
+    assignment_row.currentpoints = max(math.ceil(assignment_row.maxpoints * (sum(rawpoints)/rawallpoints)), assignment_row.currentpoints)
+    assignment_row.save()
+
+    return redirect('assigments')

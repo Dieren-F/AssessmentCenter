@@ -27,14 +27,14 @@
       <div class="col-sm-2">
         {% block sidebar %}
           {% if user.is_authenticated %}
-            {% if user.is_superuser %}
-              <a href="{% url 'index' %}assignquiz" class="menuhrefitem">
+            {% if user.is_superuser or user.is_staff%}
+              <a href="{% url 'index' %}assigments" class="menuhrefitem">
                 <div class="mainmenuitem">
                   <span class="menutxt">Назначения тестов</span>
                   <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
                 </div>
               </a>
-
+              
               <a href="{% url 'index' %}clients" class="menuhrefitem">
                 <div class="mainmenuitem">
                   <span class="menutxt">Список клиентов</span>
@@ -49,19 +49,30 @@
                 </div>
               </a>
 
+              <a href="{% url 'index' %}editresults" class="menuhrefitem">
+                <div class="mainmenuitem">
+                  <span class="menutxt">Описание результатов</span>
+                  <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+                </div>
+              </a>
+
+              <!--
               <a href="{% url 'index' %}profile" class="menuhrefitem">
                 <div class="mainmenuitem">
                   <span class="menutxt">Настройки администратора</span>
                   <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
                 </div>
               </a>
+              -->
+
+            {% else %}
+              <a href="{% url 'index' %}assigments" class="menuhrefitem">
+                <div class="mainmenuitem">
+                  <span class="menutxt">Назначенные тесты</span>
+                  <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
+                </div>
+              </a>
             {% endif %}
-            <a href="{% url 'index' %}assigments" class="menuhrefitem">
-              <div class="mainmenuitem">
-                <span class="menutxt">Назначенные тесты</span>
-                <span class="menudec"><img src="{% static 'img/menuarrow.png' %}" width="32px"></span>
-              </div>
-            </a>
 
             <a href="{% url 'index' %}results" class="menuhrefitem">
               <div class="mainmenuitem">

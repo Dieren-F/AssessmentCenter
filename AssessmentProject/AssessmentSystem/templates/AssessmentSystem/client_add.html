@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    <div class="form-container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <h3>Добавить клиента или сотрудника</h3>
+            <div>
+                <div>Имя для входа: {{ form.username }} <span>разрешить вход {{ form.is_active}}</span></div>
+                <div>Пароль: {{ form.password }} <span>{{form.password.errors}}</span></div>
+                <div>Имя: {{ form.first_name }}</div>
+                <div>Фамилия: {{ form.last_name }}</div>
+                <div>Электронная почта: {{ form.email }}</div>
+                <div>Сотрудник: {{ form.is_staff }}</div>
+                <input type="submit" value="Сохранить" class="btn btn-primary"/>
+                <a href="{% url 'clients' %}" type="button" class="btn btn-primary">Отмена</a>
+                {{form.errors}}
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

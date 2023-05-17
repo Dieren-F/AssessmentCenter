@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  {% if user.is_authenticated and user.is_staff == True %}
+    <h1>Список клиентов</h1>
+  {% endif %}
+    
+  
+    {% if user.is_authenticated and user.is_staff == True %}
+      <a href="{% url 'clientcreate' %}" type="button" class="btn btn-primary">Добавить клиента или сотрудника</a>
+    {% endif %}
+    <table class="table card-header">
+      <thead class="text-secondary">
+        <th>Статус</th>
+        <th>Имя пользователя</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Электронная почта</th>
+        <th>Вход</th>
+      </thead>
+      <tbody id="item-users">
+        {% for itm in itm_list %}
+            <tr>
+              {% if itm.is_staff %}
+                <td>Сотрудник</td>
+              {% else %}
+                <td>Клиент</td>
+              {% endif %}
+              <td><a href="{% url 'clientupdate' itm.id %}">{{ itm.username }}</a></td>
+              <td>{{ itm.first_name }}</td>
+              <td>{{ itm.last_name }}</td>
+              <td>{{ itm.email }}</td>
+              {% if itm.is_active %}
+                <td>Активирован</td>
+              {% else %}
+                <td>Блокирован</td>
+              {% endif %}
+            </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+{% endblock %}

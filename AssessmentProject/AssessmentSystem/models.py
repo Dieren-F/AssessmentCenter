@@ -90,9 +90,12 @@ class results(models.Model):
     questionID = models.ForeignKey(questions, on_delete=models.CASCADE)
     qtypeID = models.IntegerField(default=0, help_text="Type of question") # added later for testng system
     answerID = models.ForeignKey(answers, on_delete=models.CASCADE) # added later for testng system
+    attempt = models.IntegerField(default=0, help_text="Number of attempt for this assignment") # added later for testng system
     value = models.CharField(default="0", max_length=255, help_text="Answer") # added later for testng system
+
 
 class textresult(models.Model):
     sigmin = models.IntegerField(default=0, help_text="Result of test in points, lower bound") # added later for testng system
     sigmax = models.IntegerField(default=0, help_text="Result of test in points, upper bound") # added later for testng system
     description = models.CharField(default="There is no description for this number of points yet.", max_length=7168, help_text="Description of achievements") # added later for testng system
+    quizID = models.ForeignKey(quizzes, on_delete=models.CASCADE)

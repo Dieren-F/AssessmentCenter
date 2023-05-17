@@ -1,0 +1,41 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  {% if user.is_authenticated and user.is_staff == True %}
+    <h1>Результаты пройденных тестов</h1>
+  {% else%}
+    <h1>Результаты пройденных Вами тестов</h1>
+  {% endif %}
+    
+  
+    {% if user.is_authenticated and user.is_staff == True %}
+      <a href="{% url 'resultcreate' %}" type="button" class="btn btn-primary">Добавить описание</a>
+    {% endif %}
+    <table class="table card-header">
+      <thead class="text-secondary">
+        {% if user.is_authenticated and user.is_staff == True %}
+          <th>Испытуемый</th>
+        {% endif %}
+          <th>Тест</th>
+          <th>Результат</th>
+          <th>&nbsp;</th>
+      </thead>
+      <tbody id="item-answers">
+        {% for assignment in assignment_list %}
+            <tr>
+              {% if user.is_authenticated and user.is_staff == True %}
+                <td>{{ assignment.clientID.first_name }} 
+                    {{ assignment.clientID.last_name }}
+                    ({{assignment.clientID.username}})
+                </td>
+              {% endif %}
+              <td>{{ assignment.quizID.quizname }}</td>
+              <td>{{ assignment.currentpoints }}</td>
+              <td>
+                <a href="{% url 'resultdetail' assignment.currentpoints %}" type="button" class="btn btn-primary">Расшифровать результат</a>
+              </td>
+            </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+{% endblock %}

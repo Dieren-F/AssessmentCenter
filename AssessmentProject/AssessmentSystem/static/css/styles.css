@@ -271,6 +271,28 @@ a.quiz-add-item
     border-radius: 30px;
 }
 
+
+.result-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 50px 50px 50px 50px;
+    padding: 50px 50px 50px 50px;
+
+    /*transform: translate(-50%, -50%);*/
+
+
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    border: 2px solid black;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 14pt;
+}
+
 .questions-container {
     flex-direction: column;
     width: 100%;
