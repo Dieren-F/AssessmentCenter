@@ -1,19 +1,29 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<div class="maincontent">
+  <div class="maincontent">
   <h1>Assessment Center Home</h1>
-  {% if user.is_authenticated %}
+    {% if user.is_staff%}
 
-    <p>Welcome to <em>Assessment Center</em>.</p>
+      <p>Добро пожаловать в <em>Ассессмент-центр</em>.</p>
+      <p>Ассессмент-центр предназначен для оценки работы персонала.</p>
+      <ul>
+        <li>Перейдите во вкладку "Назначения тестов" для назначения назначения или прохождения тестов</li>
+        <li>Перейдите во вкладку "Список клиентов" для добавления новых клиентов</li>
+        <li>Перейдите во вкладку "Конструктор тестов" для добавления, удаления или редактирования тестов</li>
+        <li>Перейдите во вкладку "Описание результатов" для добавления и редактирования результатов тестов</li>
+        <li>Перейдите во вкладку "Результаты" для просмотра результатов пройденных тестов</li>
+      </ul>
 
-  <h2>The assessment center has the following api urls:</h2>
-    <ul>
-      <li><a href="{%url 'index'%}api/getthemes">{%url 'index'%}api/getthemes"</a></li>
-      <li><a href="{%url 'index'%}api/getquizzes/themeID">{%url 'index'%}api/getquizzes/themeID"</a></li>
-    </ul>
-  {%else%}
-  <p>Welcome to <em>Assessment Center</em>, for get all features of this systme you need to <a href="{% url 'index' %}accounts/login">login</a>.</p>
-  {%endif%}
+    {%else%}
+
+      <p>Добро пожаловать в <em>Ассессмент-центр</em>.</p>
+      <p>Ассессмент-центр предназначен для оценки работы персонала.</p>
+      <ul>
+        <li>Перейдите во вкладку "Назначенные тесты" для прохождения доступных тестов</li>
+        <li>Перейдите во вкладку "Результаты" для просмотра результатов уже пройденных тестов</li>
+      </ul>
+    
+    {%endif%}
   </div>
 {% endblock %}

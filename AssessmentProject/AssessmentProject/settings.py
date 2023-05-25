@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)^!ce^lvc&p1v^_$+v+h=20clzai)jt&gazd(8mo7t!ka=0@=9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+#DEBUG = False
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -89,7 +90,7 @@ DATABASES = {
         "USER": "postgres",
         "PASSWORD": "postgrespw",
         "HOST": "host.docker.internal",
-        "PORT": 32769,
+        "PORT": 32768,
 #        "PORT": 5432,
     }
 }
@@ -130,6 +131,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [STATIC_DIR]
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

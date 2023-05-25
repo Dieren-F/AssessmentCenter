@@ -3,7 +3,8 @@
 {% block content %}
 {%if result_detail%}
   <div class="result-container">
-    {{ result_detail.description }}
+    {% autoescape off %}{{ result_detail.description }}{% endautoescape %}
+    <!--{{ result_detail.description }}-->
   </div>
 {% else %}
   <div class="result-container">

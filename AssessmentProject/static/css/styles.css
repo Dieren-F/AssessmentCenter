@@ -1,0 +1,564 @@
+html, body { height: 100%; }
+/*установка для тега body*/
+.main-page {
+    background-image: url(../img/ghjtrn.png);
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/*Установка для окна авторизации и всех связанных с эти сообщений*/
+.auth-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 500px;
+    min-height: 500px;
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: 30px;
+    padding: 40px 10px 40px 10px;
+}
+/*Верхняя зеленая полоса с названием и кнопкой выхода */
+.caption{
+    width: 100%;
+    height: 70px;
+    background: rgba(34, 110, 38, 0.7);
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+#maintitle{
+    justify-content: left;
+    font-family: 'Inter';
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 44px;
+    margin-left: 40px;
+}
+#outicon{
+    margin: 0px 40px 0px auto;
+}
+/*Конец стилей для верхней зеленой полосы*/
+
+/*1. Стили для меню слева*/
+.col-sm-2{
+    padding: 0px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+/*1.1 Стиль для одного пункта меню*/
+.mainmenuitem{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    background: rgba(34, 110, 38, 0.7);
+    backdrop-filter: blur(2px);
+    min-height: 100px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 16px;
+    color: black;
+    border-bottom: 1px solid black;
+}
+.mainmenulastitem{
+    background: rgba(34, 110, 38, 0.7);
+    backdrop-filter: blur(2px);
+}
+.sidebar-nav {
+    list-style: none;
+}
+
+/*Текст в меню*/
+.menutxt{
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 22px;
+    margin: auto auto auto 20px;
+}
+/*Стрелочка в меню*/
+.menudec{
+    margin: auto 10px auto 0px;
+}
+a.menuhrefitem:hover{
+    text-decoration: none;
+}
+/*Конец определения стилей для меню слева*/
+
+/*Задайт параметры для окна с основным содержимым*/
+.col-sm-10{
+    background-color: rgb(177, 177, 177);
+    height: calc(100vh - 70px);
+}
+/*Основное содержимое опеределено*/
+
+.box-conteiner {
+    display: flex;
+    flex-direction: row;
+}
+
+.box-title {
+    /* Добро пожаловать в ассессмент центр! */
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 44px;
+    text-align: center;
+    color: #2e2c25;
+    mix-blend-mode: normal;
+}
+
+.box-subtitle {
+    /* Войдите, чтобы продолжить< */
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 44px;
+    text-align: center;
+    color: #696253;
+    mix-blend-mode: normal;
+}
+
+.box-form {
+    font-style: italic;
+}
+
+input#id_username{
+    margin: 50px 40px 0px 40px;
+    border: 0px;
+    border-bottom: 1px solid navy;
+    background: url(../img/authlogin.png) no-repeat scroll 3px 3px;
+    padding-left:30px;
+    width: calc(100% - 80px);
+}
+input#id_username:focus { 
+    outline: none !important;
+    border-color: #719ECE;
+    box-shadow: 0 0 10px #719ECE;
+ }
+
+ input#id_password{
+    margin: 20px 40px 0px 40px;
+    border: 0px;
+    border-bottom: 1px solid navy;
+    background: url(../img/authpassword.png) no-repeat scroll 3px 3px;
+    padding-left:30px;
+    width: calc(100% - 80px);
+}
+input#id_password:focus { 
+    outline: none !important;
+    border-color: #719ECE;
+    box-shadow: 0 0 10px #719ECE;
+ }
+
+.box-button {
+    width: 151px;
+    height: 47px;
+    left: 645px;
+    top: 590px;
+    display: block;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+
+    background: #3096CF;
+    border-radius: 30px;
+    border: 2px solid rgba(248, 245, 245, 0.7);
+    font-weight: bold;
+
+    color:white;
+}
+
+.box-link{
+    display: flex;
+    justify-content: center;
+}
+
+.error-message{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    color: #ee5252;
+}
+
+.quiz-item {
+    /* Rectangle 7 */
+
+    width: 200px;
+    height: 125px;
+    border: 2px solid black;
+    display: flex;
+    margin: 20px 20px 20px 20px;
+    flex-direction: column;
+
+    background: rgba(116, 155, 91, 0.5);
+    box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+a.quiz-add-item
+{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.quiz-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 80%;
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+}
+
+.quiz-icon {
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.quiz-title {
+    margin: auto;
+    color: white;
+    font-size: large;
+}
+
+.quiz-bg {
+    width: 100%;
+    height: 65%;
+    background-color: #D9CE9B;
+    border-radius: 30px 30px 0px 0px;
+}
+
+.quiz-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.form-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+    margin: 50px 50px 50px 50px;
+    padding: 50px 50px 50px 50px;
+
+    /*transform: translate(-50%, -50%);*/
+
+
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    border: 2px solid black;
+    border-radius: 30px;
+}
+
+
+.result-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 50px 50px 50px 50px;
+    padding: 50px 50px 50px 50px;
+
+    /*transform: translate(-50%, -50%);*/
+
+
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    border: 2px solid black;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 14pt;
+}
+
+.questions-container {
+    flex-direction: column;
+    width: 100%;
+    height: 80%;
+}
+
+.question-item {
+    flex-direction: row;
+    width: 100%;
+    display: flex;
+}
+
+.question-menu {
+    width: 128px;
+}
+
+.ask-container {
+    position: relative;
+    margin: 10px 10px 10px 10px;
+    padding: 50px 50px 50px 50px;
+
+
+    /*transform: translate(-50%, -50%);*/
+
+
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    border-radius: 30px;
+    border: 2px solid black;
+
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 700;
+    font-size: 22px;
+}
+.ask-edit-container
+{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 10px 10px 10px 10px;
+    padding: 10px 20px 10px 20px;
+    width: 90%;
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: 30px;
+    border: 2px solid black;
+}
+
+.ask-edit_append
+{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+
+.ask-edit-helper
+{
+    color: #c9c9c9;
+    margin: auto auto auto 10px;
+}
+
+/*Here are starts css for test window*/
+
+.shadow-style
+{
+    display: table;
+    position: fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    backdrop-filter: blur(2px);
+    background-color:#c9c9c9;
+    z-index: 9000;
+}
+.blank-style
+{
+    position: absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    width: 95%;
+    height: 95%;
+    margin: auto auto;
+    z-index: 9900;
+}
+.substrat-style
+{
+    display: flex;
+    flex-direction: row;
+    flex-flow: row nowrap;
+    width: 100%;
+    height: 100%;
+}
+.main-style
+{
+    display:flex;
+    flex-grow: 4;
+    flex-direction: column;
+    height: 95%;
+    margin: 20px 5px 20px 20px;
+    /*border: 1px solid black;*/
+}
+.menu-style
+{
+    display:flex;
+    flex-grow: 1;
+    flex-direction: column;
+    height: 95%;
+    margin: 20px 20px 20px 5px;
+    border-left: 1px solid #c9c9c9;
+    /*border: 1px solid black;*/
+}
+.quest-style
+{
+    display:flex;
+    flex-grow: 1;
+    margin: 5px 5px 5px 5px;
+    font-size: 16pt;
+    border-bottom: 1px solid #c9c9c9;
+    /*border: 1px solid black;*/
+}
+.answer-style
+{
+    display:flex;
+    flex-direction: column;
+    flex-grow: 5;
+    margin: 5px 5px 5px 5px;
+    /*border: 1px solid black;*/
+}
+.answer-item
+{
+    display:flex;
+    flex-direction: row;
+    margin: 5px 5px 5px 5px;
+    font-size: 14pt;
+    /*border: 1px solid black;*/
+}
+.answer-btn-item
+{
+    display:flex;
+    flex-direction: row;
+    margin: 5px 5px 5px 5px;
+    font-size: 14pt;
+    padding-top: 10px;
+    border-top: 1px solid #c9c9c9;
+    /*border: 1px solid black;*/
+}
+.timer-style
+{
+    font-size: 18pt;
+    font-weight: bold;
+    width: 95%;
+    margin: 5px 5px 5px 5px;
+    /*height: 100px;*/
+    /*border: 1px solid black;*/
+}
+.finish-style
+{
+    width: 100%;
+    /*border: 1px solid black;*/
+}
+.testswitcher-style
+{
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+}
+.testswitcher-item
+{
+    display: table;
+    vertical-align: middle;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 5px 5px 5px 5px;
+    cursor: pointer;
+    border: 2px solid #a9a9a9;
+}
+.testswitcher-item-sel
+{
+    border: 2px solid navy;
+}
+.testswitcher-item-complete
+{
+    background-color: #a9a9a9;
+}
+.testswitcher-item-number
+{
+    font-size: 12pt;
+    font-weight: bold;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+.testswitcher-item:hover
+{
+    background-color:#719ECE;
+}
+.teststart-style
+{
+    position: absolute;
+    display: table-cell;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    text-align: center;
+}
+.testtitle-style
+{
+    display:flex;
+    flex-direction: column;
+}
+.ajaxicon-style
+{
+    width: 256px;
+    margin: 0 auto;
+}
+.ttl-style
+{
+    font-weight: bold;
+    -webkit-animation: blink 4s linear infinite; 
+	animation: blink 4s linear infinite; 
+}
+@-webkit-keyframes blink { 
+	0% { color: #c9c9c9; }
+	50% { color: black; }
+	100% { color: #c9c9c9; }
+}
+
+@keyframes blink {  
+	0% { color: #c9c9c9; }
+	50% { color: black; }
+	100% { color: #c9c9c9; }
+}
+.testrulez-style
+{
+    font-size: 24pt;
+    opacity: 0;
+    animation: ani 2.5s forwards;
+}
+@keyframes ani {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+.startbtns-style
+{
+    display:flex;
+    flex-direction: row;
+    margin: 0 auto;
+}
+.startbtn-style
+{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/*Here are ends css for test window*/

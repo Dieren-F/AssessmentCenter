@@ -272,6 +272,32 @@ a.quiz-add-item
 }
 
 
+.form-container2 {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 50px 50px 50px 50px;
+    padding: 50px 50px 50px 50px;
+
+    /*transform: translate(-50%, -50%);*/
+
+
+    background: rgba(248, 245, 245, 0.7);
+    backdrop-filter: blur(2px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    border: 2px solid black;
+    border-radius: 30px;
+}
+
+.form-subcontainer2 {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+
 .result-container {
     position: relative;
     display: flex;

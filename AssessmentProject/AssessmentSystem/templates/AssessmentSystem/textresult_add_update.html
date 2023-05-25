@@ -1,31 +1,24 @@
 {% extends "base_generic.html" %}
 {% block content %}
 
-    <div class="form-container">
+    <div class="form-container2">
         <form action="" method="post">
             {% csrf_token %}
-            <h3>Добавить описание результата</h3>
-            <div>
-                <div>Тест: {{ form.quizID }}</div>
-            <!--<script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>-->
-                <div>{{ form.description }}</div>
-                <div id="editor"></div>
-                <!--<script>
-                    InlineEditor
-                        .create( document.querySelector( '#editor' ) )
-                        .then( editor => {
-                            console.log( editor );
-                        } )
-                        .catch( error => {
-                            console.error( error );
-                        } );
-                </script>-->
-                <div>Минимальный балл для вывода сообщения: {{ form.sigmin }}</div>
-                <div>Максимальный балл для вывода сообщения: {{ form.sigmax }}</div>
-                <input type="submit" value="Сохранить" class="btn btn-primary"/>
-                <a href="{% url 'results' %}" type="button" class="btn btn-primary">Отмена</a>
-                {{form.errors}}
-            </div>
+                <h3>Описание результата</h3>
+                <div>
+                    <div class="form-subcontainer2">
+                        <div>Тест: {{ form.quizID }}</div>
+                        <div>Минимальный балл для вывода сообщения: {{ form.sigmin }}</div>
+                        <div>Максимальный балл для вывода сообщения: {{ form.sigmax }}</div>
+                    </div>
+                    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+                    <div>{{ form.description }}</div>
+                    <div id="editor"></div>
+                    <script>tinymce.init({selector:'textarea'});</script>
+                    <input type="submit" value="Сохранить" class="btn btn-primary"/>
+                    <a href="{% url 'results' %}" type="button" class="btn btn-primary">Отмена</a>
+                    {{form.errors}}
+                </div>
         </form>
     </div>
 
